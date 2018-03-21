@@ -1,61 +1,140 @@
-#if [ -f ~/.bash_etc ]; then
-#    . ~/.bash_etc
-#fi
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
 
-PATH="/usr/local/bin:$PATH"
-export JAVA_HOME=$(/usr/libexec/java_home)
-export HISTCONTROL=ignoredups
-export HISTSIZE=1000
-export TERM=xterm-256color
-export FZF_DEFAULT_COMMAND="find . -path '*/\.*' -type d -prune -o -type f -print -o -type l -print 2> /dev/null | sed s/^..//"
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
-# aliases ---------------------------------------------------------------------
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
 
-if ls --version > /dev/null 2>&1; then
-  alias ls='ls --color=auto'; #gnu
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
+
+# Console Style Constants
+RST="\[\e[0m\]"           # Reset Styles
+BOLD="\[\e[1m\]"          # Bold
+UL="\[\e[4m\]"            # Underline
+HL="\[\e[7m\]"            # Highlight (inverse)
+FG_BLACK="\[\e[90m\]"     # Foreground black
+FG_RED="\[\e[91m\]"       # Foreground red
+FG_GREEN="\[\e[92m\]"     # Foreground green
+FG_YELLOW="\[\e[93m\]"    # Foreground yellow
+FG_BLUE="\[\e[94m\]"      # Foreground blue
+FG_MAGENTA="\[\e[95m\]"   # Foreground magenta
+FG_CYAN="\[\e[96m\]"      # Foreground cyan
+FG_WHITE="\[\e[97m\]"     # Foreground white
+BG_BLACK="\[\e[100m\]"    # Background black
+BG_RED="\[\e[101m\]"      # Background red
+BG_GREEN="\[\e[102m\]"    # Background green
+BG_YELLOW="\[\e[103m\]"   # Background yellow
+BG_BLUE="\[\e[104m\]"     # Background blue
+BG_MAGENTA="\[\e[105m\]"  # Background magenta
+BG_CYAN="\[\e[106m\]"     # Background cyan
+BG_WHITE="\[\e[107m\]"    # Background white
+
+
+if [ "$color_prompt" = yes ]; then
+#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1="\n${FG_MAGENTA}[\t]${RST}\`if [ \$? != 0 ]; then echo ' ${FG_RED}${BOLD}${HL}!${RST}'; fi\` ${FG_YELLOW}\w${RST}\n${debian_chroot:+($debian_chroot)}${FG_GREEN}${BOLD}\u${RST}${FG_WHITE}@${RST}${FG_CYAN}\h${RST}\$ "
 else
-  alias ls='ls -G'; #osx
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
 fi
 
-alias l.='ls -d .* --color=auto'
-alias ll='ls -al'
-alias vi='mvim -v'
-alias rm='rm -i'
-alias mv='mv -i'
-alias cp='cp -i'
-alias cd..='cd ..'
-alias eclimd='~/Applications/Eclipse_neon.app/Contents/Eclipse/eclimd'
-#alias vimr='open -a VimR.app "$@"'
-alias ctags='`brew --prefix`/bin/ctags'
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
 
-alias tmux="TERM=screen-256color tmux"
-alias tm="tmux attach || tmux new"
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-alias composer='/usr/bin/php target/composer'
-alias ag='ag --path-to-ignore ~/.agignore'
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
-# colors ----------------------------------------------------------------------
-GREEN='\e[0;32m\]'
-B_MAGENTA='\e[1;35m\]'
-YELLOW='\e[0;33m\]'
-COLOR_END='\[\033[0m\]'
-
-# PROMPT ----------------------------------------------------------------------
-# PS1="\h:\W \u\$ "  # default promopt
-TIMESTAMP='\D{%F %a %T}'
-GIT_BRANCH=''
-if [ $(which vcprompt 2> /dev/null) ]; then
-  GIT_BRANCH="\$(vcprompt -f '[%b %r]')"
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
 fi
-PS1="${YELLOW}${TIMESTAMP} ${GREEN}\u ${B_MAGENTA}\h ${YELLOW}\w ${COLOR_END} ${GIT_BRANCH}\n\$ "
-#if [ $(which vcprompt 2> /dev/null) ]; then
-  #PS1="${PS1}\$(vcprompt -f '[%b %r]')"
-#fi
-#PS1="${PS1}\n\$ "
-export PS1
 
-function google() {
-    open /Applications/Google\ Chrome.app/ "http://www.google.com/search?q= $1";
-}
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
 
-source ~/git-completion.bash
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi

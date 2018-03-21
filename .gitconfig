@@ -1,28 +1,17 @@
+# This is Git's per-user configuration file.
 [user]
-	name = John Grib
-	email = johngrib@woowahan.com
+# Please adapt and uncomment the following lines:
+#	name = 최광훈
+#	email = hoonhoon@woowahan.com
+
 [alias]
-	l = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit
-    lh = "!git l | head -n 25"
-    s = status -s
-    assume   = update-index --assume-unchanged
-    unassume = update-index --no-assume-unchanged
-    assumed  = "!git ls-files -v | grep ^h | cut -c 3-"
-    ch = "!git checkout $(git branch | fzf)"
-
-[core]
-	excludesfile = /Users/johngrib/.gitignore_global
-	editor = /usr/bin/vim
-	autocrlf = input
-	precomposeunicode = true
-	quotepath = false
-[diff]
-    tool = vimdiff
-[difftool "vimdiff"]
-    path = /usr/local/bin/vim
-[merge]
-    tool = vimdiff
-[mergetool "vimdiff"]
-    path = /usr/local/bin/vim
-	trustExitCode = true
-
+	lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)'
+	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
+	lg = !"git lg1 --all"
+    lgb = !"git lg1 --first-parent"
+    cf = !"git checkout $(git branch --all | fzf)"
+    st = !"git status"
+    acp = !"git add . & git commit -m 'updates' & git push"
+[user]
+	name = hoonhoonhoon
+	email = hoonhoon@woowahan.com
