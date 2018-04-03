@@ -10,8 +10,8 @@
 " 아래와 같이 설정한 다음 :PlugInstall<CR> 해주면 된다.
 call plug#begin('~/.vim/plugged')
 
+    Plug 'kien/ctrlp.vim'
     " Swift
-    Plug 'allwithswift/swift.vim'
     Plug 'vim-syntastic/syntastic'
     " VIM POWER
     Plug 'Shougo/vimproc.vim', {'do' : 'make'}
@@ -81,6 +81,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 
     Plug 'diepm/vim-rest-console'
+    
+    Plug 'udalov/kotlin-vim'
 
 call plug#end()
 
@@ -152,7 +154,7 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     set noerrorbells     " 에러 알림음 끄기
     set background=dark  " 검정배경을 사용 (이 색상에 맞춰 문법 하이라이트 색상이 달라짐.)
     set laststatus=2     " 상태바를 언제나 표시할 것
-    set showmatch        " 일치하는 괄호 하이라이팅
+"    set showmatch        " 일치하는 괄호 하이라이팅
     set cursorline       " highlight current line
     set lazyredraw       " redraw only when we need to.
     set showcmd          " airline 플러그인과 충돌 가능성 있음.
@@ -194,6 +196,7 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
 
 " map ----------------------------------------------------------------------
     let mapleader = "\<Space>"
+    " vim wiki 로컬 리더 키 설정
     let maplocalleader = "\\"
     " nnoremap <Leader>e :browse oldfiles<CR>
     " nnoremap <f5> :!ctags -R<CR>
@@ -521,12 +524,17 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     let g:deoplete#enable_at_startup = 1
 
     let wiki1 = {}
-    let wiki1.path = '~/git/allwithswift.github.io/_wiki/'
+    let wiki1.path = '~/rollmind.github.io/_wiki/'
+    let wiki1.ext = '.md'
+    let wiki1.diary_rel_path = '.'
+    let wiki2 = {}
+    let wiki2.path = '~/allwithswift.github.io/_wiki/'
+    let wiki2.ext = '.md'
+    let wiki2.diary_rel_path = '.'
     " let wiki1.path_html = '~/git/johngrib-wiki/html/'
     " let wiki1.syntax = 'markdown'
-    let wiki1.ext = '.md'
 
-    let g:vimwiki_list = [wiki1]
+    let g:vimwiki_list = [wiki1, wiki2]
     let g:vimwiki_conceallevel = 0
 
     command! WikiIndex :VimwikiIndex

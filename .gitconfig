@@ -12,6 +12,17 @@
     cf = !"git checkout $(git branch --all | fzf)"
     st = !"git status"
     acp = !"git add . & git commit -m 'updates' & git push"
+	camd = !"git commit --amend"
+  stm = !"git status | grep modified"
 [user]
 	name = hoonhoonhoon
 	email = hoonhoon@woowahan.com
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[core]
+	excludesfile = /Users/woowahan/.gitignore_global
+	editor = vim
