@@ -10,6 +10,9 @@
 " 아래와 같이 설정한 다음 :PlugInstall<CR> 해주면 된다.
 call plug#begin('~/.vim/plugged')
 
+    Plug 'kien/ctrlp.vim'
+    " Swift
+    Plug 'vim-syntastic/syntastic'
     " VIM POWER
     Plug 'Shougo/vimproc.vim', {'do' : 'make'}
     Plug 'tpope/vim-repeat'
@@ -54,7 +57,7 @@ call plug#begin('~/.vim/plugged')
     " Plug 'scrooloose/syntastic'        " 파일을 저장할 때 자동으로 문법 검사(ale과 중복되는 기능)
     " Plug 'w0rp/ale'                      " 실시간으로 문법 검사 (syntastic 과 중복되는 기능)
     Plug 'junegunn/vim-xmark', { 'do': 'make' }
-    Plug 'valloric/youcompleteme', { 'do': './install.py --all'}
+    Plug 'valloric/youcompleteme'
     " Plug 'wesleyche/srcexpl'
     Plug 'johngrib/vim-dracula'
 
@@ -78,6 +81,8 @@ call plug#begin('~/.vim/plugged')
     Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
 
     Plug 'diepm/vim-rest-console'
+    
+    Plug 'udalov/kotlin-vim'
 
 call plug#end()
 
@@ -149,7 +154,7 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     set noerrorbells     " 에러 알림음 끄기
     set background=dark  " 검정배경을 사용 (이 색상에 맞춰 문법 하이라이트 색상이 달라짐.)
     set laststatus=2     " 상태바를 언제나 표시할 것
-    set showmatch        " 일치하는 괄호 하이라이팅
+"    set showmatch        " 일치하는 괄호 하이라이팅
     set cursorline       " highlight current line
     set lazyredraw       " redraw only when we need to.
     set showcmd          " airline 플러그인과 충돌 가능성 있음.
@@ -191,6 +196,7 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
 
 " map ----------------------------------------------------------------------
     let mapleader = "\<Space>"
+    " vim wiki 로컬 리더 키 설정
     let maplocalleader = "\\"
     " nnoremap <Leader>e :browse oldfiles<CR>
     " nnoremap <f5> :!ctags -R<CR>
@@ -382,7 +388,8 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     "ycm
     let g:ycm_key_list_select_completion = ['<C-n>']    " 본래 <Tab> 이지만 ultisnip 과 충돌을 막기 위해 변경
     let g:ycm_key_list_previous_completion=['<C-p>']
-    let g:ycm_server_python_interpreter = '/usr/local/Cellar/python/2.7.13/bin/python'
+    let g:ycm_server_python_interpreter = '/usr/local/bin/python3'
+
     let g:ycm_complete_in_comments = 1
     let g:ycm_min_num_of_chars_for_completion = 1
 
@@ -517,13 +524,19 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     let g:deoplete#enable_at_startup = 1
 
     let wiki1 = {}
-    let wiki1.path = '~/git/johngrib.github.io/_wiki/'
+    let wiki1.path = '~/rollmind.github.io/_wiki/'
+    let wiki1.ext = '.md'
+    let wiki1.diary_rel_path = '.'
+    let wiki2 = {}
+    let wiki2.path = '~/allwithswift.github.io/_wiki/'
+    let wiki2.ext = '.md'
+    let wiki2.diary_rel_path = '.'
     " let wiki1.path_html = '~/git/johngrib-wiki/html/'
     " let wiki1.syntax = 'markdown'
-    let wiki1.ext = '.md'
 
-    let g:vimwiki_list = [wiki1]
+    let g:vimwiki_list = [wiki1, wiki2]
     let g:vimwiki_conceallevel = 0
+    let g:md_modify_disabled = 0
 
     command! WikiIndex :VimwikiIndex
     nmap <LocalLeader>ww <Plug>VimwikiIndex
@@ -577,9 +590,13 @@ command! Ncd :cd %:p:h
 " If buffer modified, update any 'Last modified: ' in the first 20 lines.
 " 'Last modified: ' can have up to 10 characters before (they are retained).
 " Restores cursor and window position using save_cursor variable.
+
 function! LastModified()
+    if g:md_modify_disabled
+        return
+    endif
   if &modified
-      echo('asdf')
+    " echo('markdown updated time modified')
     let save_cursor = getpos(".")
     let n = min([10, line("$")])
     keepjumps exe '1,' . n . 's#^\(.\{,10}updated\s*: \).*#\1' .
@@ -588,7 +605,49 @@ function! LastModified()
     call setpos('.', save_cursor)
   endif
 endfun
-autocmd BufWritePre *.md call LastModified()
+
+function! NewTemplate()
+
+    let l:wiki_directory = v:false
+    for wiki in g:vimwiki_list
+        if expand('%:p:h') . '/' == expand(wiki.path)
+            let l:wiki_directory = v:true
+            break
+        endif
+    endfor
+    if !l:wiki_directory
+        return
+    endif
+    if line("$") > 1
+        return
+    endif
+    let l:template = []
+    call add(l:template, '---')
+    call add(l:template, 'layout  : wiki')
+    call add(l:template, 'title   : ')
+    call add(l:template, 'summary : ')
+    call add(l:template, 'date    : ' . strftime('%Y-%m-%d %H:%M:%S +0900'))
+    call add(l:template, 'updated : ' . strftime('%Y-%m-%d %H:%M:%S +0900'))
+    call add(l:template, 'tags    : ')
+    call add(l:template, 'toc     : true')
+    call add(l:template, 'public  : true')
+    call add(l:template, 'parent  : ')
+    call add(l:template, 'latex   : false')
+    call add(l:template, '---')
+    call add(l:template, '* TOC')
+    call add(l:template, '{:toc}')
+    call add(l:template, '')
+    call add(l:template, '# ')
+    call setline(1, l:template)
+    execute 'normal! G'
+    execute 'normal! $'
+
+    echom 'new wiki page has created'
+endfunction
+augroup vimwikiauto
+    autocmd BufWritePre *.md call LastModified()
+    autocmd BufRead,BufNewFile *.md call NewTemplate()
+augroup END
 
 " Change cursor shape between insert and normal mode in iTerm2.app + tmux + vim
 " https://gist.github.com/andyfowler/1195581
