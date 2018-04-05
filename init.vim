@@ -459,7 +459,8 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     nnoremap <LocalLeader>t :TagbarToggle<CR>
 
     " vim-auto-save
-    nnoremap <Space>w :w<CR>
+    nnoremap <Leader>w :w<CR>
+    nnoremap <Leader>x :x<CR>
     " nnoremap <silent> <Esc> <Esc>:w<CR>
     " inoremap <silent> <Esc> <C-[>:w<CR>
     " nnoremap <F1><F2> :ToggleAutoSave()<CR>
@@ -642,7 +643,6 @@ function! NewTemplate()
     execute 'normal! G'
     execute 'normal! $'
 
-    echom 'new wiki page has created'
 endfunction
 augroup vimwikiauto
     autocmd BufWritePre *.md call LastModified()
