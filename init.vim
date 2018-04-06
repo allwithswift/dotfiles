@@ -10,9 +10,11 @@
 " 아래와 같이 설정한 다음 :PlugInstall<CR> 해주면 된다.
 call plug#begin('~/.vim/plugged')
 
+    Plug 'yuttie/comfortable-motion.vim'
     Plug 'kien/ctrlp.vim'
     " Swift
-    Plug 'vim-syntastic/syntastic'
+    Plug 'keith/swift.vim'
+    " Plug 'vim-syntastic/syntastic'
     " VIM POWER
     Plug 'Shougo/vimproc.vim', {'do' : 'make'}
     Plug 'tpope/vim-repeat'
@@ -55,7 +57,7 @@ call plug#begin('~/.vim/plugged')
 
     " language support
     " Plug 'scrooloose/syntastic'        " 파일을 저장할 때 자동으로 문법 검사(ale과 중복되는 기능)
-    " Plug 'w0rp/ale'                      " 실시간으로 문법 검사 (syntastic 과 중복되는 기능)
+    Plug 'w0rp/ale'                      " 실시간으로 문법 검사 (syntastic 과 중복되는 기능)
     Plug 'junegunn/vim-xmark', { 'do': 'make' }
     Plug 'valloric/youcompleteme'
     " Plug 'wesleyche/srcexpl'
@@ -122,7 +124,7 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
 
     if has("gui_macvim")
         set macmeta
-        set guifont=Meslo\ LG\ M\ DZ\ for\ Powerline:h11
+        set guifont=Meslo\ LG\ M\ DZ\ for\ Powerline:h16
 
         " macVim 에서 esc 로 영문변환, imi 는 1 또는 2 로 설정해준다
         set noimd
@@ -551,6 +553,13 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     nmap <LocalLeader>whh <Plug>Vimwiki2HTMLBrowse
     nmap <LocalLeader>wt :VimwikiTable<CR>
 
+    " comfortable motion
+    let g:comfortable_motion_interval=50
+
+    " ale
+    let g:ale_fixers = { 'javascript': ['eslint'], 'swift': ['swiftlint'] }
+    let g:ale_lint_on_save = 1
+    let g:ale_lint_on_text_changed = 1
 " functions -------------------------------------------------------------------
 function! ToggleNumber()
     if(&relativenumber == 1)
