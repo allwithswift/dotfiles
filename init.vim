@@ -30,8 +30,8 @@ call plug#begin('~/.vim/plugged')
 
     " file browser
     Plug 'ctrlpvim/ctrlp.vim'
-    Plug 'scrooloose/nerdtree'
-        Plug 'jistr/vim-nerdtree-tabs'
+    " Plug 'scrooloose/nerdtree'
+        " Plug 'jistr/vim-nerdtree-tabs'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install.sh --clang-completer --system-libclang' }
         Plug 'junegunn/fzf.vim'
 
