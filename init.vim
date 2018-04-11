@@ -11,7 +11,6 @@
 call plug#begin('~/.vim/plugged')
 
     Plug 'yuttie/comfortable-motion.vim'
-    " Plug 'kien/ctrlp.vim'
     " Swift
     Plug 'keith/swift.vim'
     " Plug 'vim-syntastic/syntastic'
@@ -29,7 +28,6 @@ call plug#begin('~/.vim/plugged')
     Plug 'mbbill/undotree'
 
     " file browser
-    " Plug 'ctrlpvim/ctrlp.vim'
     " Plug 'scrooloose/nerdtree'
         " Plug 'jistr/vim-nerdtree-tabs'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install.sh --clang-completer --system-libclang' }
@@ -174,7 +172,7 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
 
     "사용
     set bs=indent,eol,start  " backspace 키 사용 가능
-    set tabstop=4 softtabstop=4 shiftwidth=4 expandtab smarttab
+    set tabstop=2 softtabstop=2 shiftwidth=2 noexpandtab smarttab
     "set noimd               " no imdisable 한글 입력기 관련인데 mac 에서는 안 통하는듯
     set cindent autoindent smartindent
     set history=200 undolevels=2000
@@ -291,12 +289,6 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     " map #  <Plug>(incsearch-nohl-#)
     " map g* <Plug>(incsearch-nohl-g*)
     " map g# <Plug>(incsearch-nohl-g#)
-
-    " ctrlp
-    let g:ctrlp_working_path_mode = 'ra'
-    " let g:ctrlp_map = ''
-    let g:ctrlp_map = '<c-p>'
-    let g:ctrlp_cmd = 'CtrlP'
 
     " UndoTree
     nnoremap <LocalLeader>u :UndotreeToggle<cr>
@@ -422,6 +414,9 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     nnoremap <f1>c :History:<CR>
     nnoremap <f1>/ :History/<CR>
     nnoremap <f1>b :Buffers<CR>
+    
+    
+    
     " gem install coderay
     " let g:fzf_files_options = '--preview "(coderay {} || cat {}) 2> /dev/null | head -' .&lines.'"'
     command! -bang -nargs=* History call fzf#vim#history(fzf#vim#with_preview())
