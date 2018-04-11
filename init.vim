@@ -11,7 +11,7 @@
 call plug#begin('~/.vim/plugged')
 
     Plug 'yuttie/comfortable-motion.vim'
-    Plug 'kien/ctrlp.vim'
+    " Plug 'kien/ctrlp.vim'
     " Swift
     Plug 'keith/swift.vim'
     " Plug 'vim-syntastic/syntastic'
@@ -60,7 +60,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'w0rp/ale'                      " 실시간으로 문법 검사 (syntastic 과 중복되는 기능)
     Plug 'junegunn/vim-xmark', { 'do': 'make' }
     Plug 'valloric/youcompleteme'
-    " Plug 'wesleyche/srcexpl'
+    Plug 'wesleyche/srcexpl'
     Plug 'johngrib/vim-dracula'
 
     " Plug 'kana/vim-operator-user'
