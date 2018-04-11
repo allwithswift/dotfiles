@@ -29,7 +29,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'mbbill/undotree'
 
     " file browser
-    Plug 'ctrlpvim/ctrlp.vim'
+    " Plug 'ctrlpvim/ctrlp.vim'
     " Plug 'scrooloose/nerdtree'
         " Plug 'jistr/vim-nerdtree-tabs'
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install.sh --clang-completer --system-libclang' }
@@ -473,7 +473,7 @@ filetype plugin indent on " Put your non-Plugin stuff after this line
     " nnoremap <silent> <F6> :call ToggleSyntasticWithAutoSave()<CR>
 
     " srcexpl
-    nmap <LocalLeader>e :SrcEplToggle<CR>
+    nmap <LocalLeader>e :SrcExplToggle<CR>
     let g:SrcExpl_winHeight = 8
     let g:SrcExpl_refreshTime = 300
     let g:SrcExpl_jumpKey = "<ENTER>"
