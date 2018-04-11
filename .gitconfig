@@ -25,4 +25,4 @@
 	trustExitCode = true
 [core]
 	excludesfile = /Users/woowahan/.gitignore_global
-	editor = vim
+	editor = nvim
