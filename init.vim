@@ -117,7 +117,7 @@ endif
 
 if has("nvim")
 	" set termguicolors
-	set clipboard^=unnamedplus
+	" set clipboard^=unnamedplus
 endif
 
 if has("gui_macvim")
