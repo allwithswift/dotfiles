@@ -4,6 +4,7 @@ hs.hotkey.bind({'option', 'cmd'}, 'r', hs.reload)
 hs.hotkey.bind({'shift', 'cmd'}, 'T', function() hs.application.launchOrFocus('Terminal') end)
 hs.hotkey.bind({'shift', 'cmd'}, 'X', function() hs.application.launchOrFocus('Xcode') end)
 hs.hotkey.bind({'shift', 'cmd'}, 'V', function() hs.application.launchOrFocus('VimR') end)
+hs.hotkey.bind({'shift', 'cmd'}, 'B', function() hs.application.launchOrFocus('Safari') end)
 
 local caps_mode = hs.hotkey.modal.new()
 local inputEnglish = "com.apple.keylayout.ABC"
